@@ -25,9 +25,9 @@ public class ScorePanel extends JPanel {
     ScorePanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(BOARD_BG_COLOR);
-        setBorder(BorderFactory.createTitledBorder(""));
+        setBorder(BorderFactory.createEmptyBorder(0,20,0, 20));
 
-        JLabel title = new JLabel("Escoba del 15");
+        JLabel title = new JLabel("Escoba of 15");
         title.setFont(FONT_TITLE);
         title.setForeground(Color.WHITE);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -35,7 +35,8 @@ public class ScorePanel extends JPanel {
 
         add(Box.createVerticalStrut(20));
 
-        add(createLabel("Player Score:"));
+        add(createLabel("Player Score:")).setForeground(Color.ORANGE);
+
         escobasPlayerLbl = createLabel("Escobas: 0");
         add(escobasPlayerLbl);
 
@@ -50,7 +51,7 @@ public class ScorePanel extends JPanel {
 
         add(Box.createVerticalStrut(40));
 
-        add(createLabel("CPU Score:"));
+        add(createLabel("CPU Score:")).setForeground(Color.ORANGE);
         escobasCpuLbl = createLabel("Escobas: 0");
         add(escobasCpuLbl);
 
@@ -70,6 +71,10 @@ public class ScorePanel extends JPanel {
         JLabel lbl = new JLabel(title);
         lbl.setFont(FONT_SCORE);
         lbl.setForeground(Color.WHITE);
+        Dimension size = new Dimension(150, 30);
+        lbl.setMinimumSize(size);
+        lbl.setPreferredSize(size);
+        lbl.setMaximumSize(size);
         lbl.setAlignmentX(Component.CENTER_ALIGNMENT);
         return lbl;
     }

@@ -52,10 +52,10 @@ public class MainFrame extends JFrame {
 
   private CardsPanel createBoardPanel() {
     boardPanel = new CardsPanel();
-    TitledBorder border = new TitledBorder(new LineBorder(Color.black),
-            "Board",
+    TitledBorder border = new TitledBorder(new LineBorder(Color.darkGray),
+            "Select the cards you want.",
             TitledBorder.CENTER,
-            TitledBorder.BELOW_TOP);
+            TitledBorder.BELOW_TOP, new Font("Serif", Font.PLAIN, 18) , Color.ORANGE);
     boardPanel.setBorder(border);
     boardPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 30));
     return boardPanel;

@@ -1,2 +1,4 @@
 # escoba
-Escoba del 15 Java game
+
+#Run:
+#java -jar escoba.jar

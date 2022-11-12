@@ -2,7 +2,6 @@ package org.javagames.escoba.core;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Collections;
 import java.util.ArrayList;
@@ -13,12 +12,11 @@ import java.util.stream.Collectors;
 import javax.swing.*;
 
 import org.javagames.escoba.core.strategy.ChoiceStrategy;
+import org.javagames.escoba.core.strategy.DefaultChoiceStrategy;
 import org.javagames.escoba.view.CardButton;
 import org.javagames.escoba.view.MainFrame;
 
 public class Game {
-  private final ImageLoader imageLoader = new ImageLoader();
-
   private final MainFrame mainFrame;
 
   private List<ImageIcon> cardIcons;
@@ -39,12 +37,15 @@ public class Game {
 
   private Score scoreCpu = new Score();
 
+  private ChoiceStrategy choiceStrategy = new DefaultChoiceStrategy();
+
   public Game(final MainFrame mainFrame) {
     this.mainFrame = mainFrame;
     init();
   }
 
   private void init() {
+    final ImageLoader imageLoader = new ImageLoader();
     bg = imageLoader.loadIcon("/images/bg.png");
     cardIcons = imageLoader.loadIcons();
 
@@ -54,12 +55,17 @@ public class Game {
     playerCards = Arrays.asList(createPlayerCard(bg), createPlayerCard(bg), createPlayerCard(bg));
     mainFrame.setPlayerCards(playerCards);
 
+    mainFrame.setDealButton(createDealButton());
+  }
+
+  private JButton createDealButton() {
     dealButton = new JButton("Deal");
     dealButton.setEnabled(false);
+    dealButton.setFont(new Font("Serif", Font.BOLD, 18));
+    dealButton.setForeground(Color.orange.darker());
     dealButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-    //dealButton.setPreferredSize(new Dimension(150, 80));
     dealButton.addActionListener(this::mazeClick);
-    mainFrame.setDealButton(dealButton);
+    return dealButton;
   }
 
   public void start() {
@@ -162,16 +168,14 @@ public class Game {
   }
 
   private void mazeClick(ActionEvent actionEvent) {
-    if (!mazeIcons.isEmpty()) {
-     deal();
-    } else {
+    if (mazeIcons.isEmpty()) {
       final long totalCPU = scoreCpu.getTotal(scorePlayer);
       final long totalPlayer = scorePlayer.getTotal(scoreCpu);
       String msg = totalCPU > totalPlayer ? "You Lose!" : "You win!";
       JOptionPane.showMessageDialog(mainFrame, "No more cards! - " + msg, "Game Over", JOptionPane.WARNING_MESSAGE);
       start();
-      deal();
     }
+    deal();
   }
 
   private void computerChoice() {
@@ -184,7 +188,7 @@ public class Game {
     List<Integer> selectedCards = new ArrayList<>();
     CardButton selectedCard = null;
     for (CardButton c: cpuCards) {
-      List<Integer> subsetSumCards = ChoiceStrategy.subsetSum(cards,15 - c.getNumber());
+      List<Integer> subsetSumCards = choiceStrategy.choiceCards(cards,15 - c.getNumber());
       if (subsetSumCards.size() > selectedCards.size()) {
         selectedCards = subsetSumCards;
         selectedCard = c;
