@@ -7,6 +7,9 @@ import java.awt.*;
 
 import static org.javagames.escoba.view.MainFrame.BOARD_BG_COLOR;
 
+/**
+ * Panel to display the scores for player and CPU.
+ */
 public class ScorePanel extends JPanel {
 
     private static final Font FONT_TITLE = new Font("Serif", Font.ITALIC, 30);
@@ -22,10 +25,10 @@ public class ScorePanel extends JPanel {
     private JLabel goldensCpuLbl;
     private JLabel sevensCpuLbl;
 
-    ScorePanel() {
+    public ScorePanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(BOARD_BG_COLOR);
-        setBorder(BorderFactory.createEmptyBorder(0,20,0, 20));
+        setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
 
         JLabel title = new JLabel("Escoba of 15");
         title.setFont(FONT_TITLE);
@@ -67,7 +70,7 @@ public class ScorePanel extends JPanel {
         add(Box.createVerticalStrut(40));
     }
 
-    private JLabel createLabel(String title) {
+    private JLabel createLabel(final String title) {
         JLabel lbl = new JLabel(title);
         lbl.setFont(FONT_SCORE);
         lbl.setForeground(Color.WHITE);
@@ -79,14 +82,16 @@ public class ScorePanel extends JPanel {
         return lbl;
     }
 
-    void setScorePlayer(final Score score) {
+    public void setScorePlayer(final Score score) {
+        if (score == null) return;
         escobasPlayerLbl.setText(String.format("Escobas: %d", score.getEscobas()));
         cardsPlayerLbl.setText(String.format("Cards: %d", score.getCards()));
         goldensPlayerLbl.setText(String.format("Goldens: %d", score.getGolden()));
         sevensPlayerLbl.setText(String.format("Sevens: %d", score.getSevens()));
     }
 
-    void setScoreCpu(final Score score) {
+    public void setScoreCpu(final Score score) {
+        if (score == null) return;
         escobasCpuLbl.setText(String.format("Escobas: %d", score.getEscobas()));
         cardsCpuLbl.setText(String.format("Cards: %d", score.getCards()));
         goldensCpuLbl.setText(String.format("Goldens: %d", score.getGolden()));

@@ -10,12 +10,13 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+/**
+ * Represents a button for a card in the Escoba game.
+ */
 public class CardButton extends JButton {
 
   private ImageIcon cardImage;
-
   private final ImageIcon backGroundIcon;
-
   private boolean hidden;
 
   public CardButton(final ImageIcon backGroundIcon) {
@@ -33,25 +34,31 @@ public class CardButton extends JButton {
   }
 
   @Override
-  public void paintComponent(Graphics g) {
+  protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     if (cardImage == null && !hidden) return;
-    final Image image = (hidden ? backGroundIcon: cardImage).getImage();
+    final Image image = (hidden ? backGroundIcon : cardImage).getImage();
     g.drawImage(image, 5, 5, getWidth() - 10, getHeight() - 10, this);
   }
 
-  public void setCardImage(ImageIcon cardImage) {
+  public void setCardImage(final ImageIcon cardImage) {
     this.cardImage = cardImage;
     repaint();
   }
 
-  public void setHidden(boolean hidden) {
+  public void setHidden(final boolean hidden) {
     this.hidden = hidden;
   }
 
+  public boolean isHidden() {
+    return hidden;
+  }
+
   @Override
-  public void setIcon(Icon icon) {
-    setCardImage((ImageIcon) icon);
+  public void setIcon(final Icon icon) {
+    if (icon instanceof ImageIcon) {
+      setCardImage((ImageIcon) icon);
+    }
   }
 
   public ImageIcon getCardImage() {
@@ -64,20 +71,24 @@ public class CardButton extends JButton {
 
   public int getNumber() {
     return Optional.ofNullable(cardImage)
-      .map(ImageIcon::getDescription)
-      .map(n -> {
-        if (n.startsWith("A")) return 1;
-        if (n.startsWith("S")) return 8;
-        if (n.startsWith("C")) return 9;
-        if (n.startsWith("R")) return 10;
-        return Integer.parseInt(n.substring(0, 1));
-      }).orElse(0);
+        .map(ImageIcon::getDescription)
+        .map(n -> {
+          if (n.startsWith("A")) return 1;
+          if (n.startsWith("S")) return 8;
+          if (n.startsWith("C")) return 9;
+          if (n.startsWith("R")) return 10;
+          try {
+            return Integer.parseInt(n.substring(0, 1));
+          } catch (NumberFormatException e) {
+            return 0;
+          }
+        }).orElse(0);
   }
 
   public String getPalo() {
     return Optional.ofNullable(cardImage)
-      .map(ImageIcon::getDescription)
-      .map(n -> n.substring(1, 2)).orElse("");
+        .map(ImageIcon::getDescription)
+        .map(n -> n.substring(1, 2)).orElse("");
   }
 
   public CardButton clone2() {
